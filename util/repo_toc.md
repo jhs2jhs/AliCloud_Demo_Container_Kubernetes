@@ -1,6 +1,3 @@
-# AliCloud_Demo_Container_Kubernetes
-
-----
 - __AliCloud_Demo_Container_Kubernetes__
   - [LICENSE](AliCloud_Demo_Container_Kubernetes/LICENSE)
   - [README.md](AliCloud_Demo_Container_Kubernetes/README.md)
@@ -56,5 +53,3 @@
   - __virtualkubelet__
     - [README.md](AliCloud_Demo_Container_Kubernetes/virtualkubelet/README.md)
 
-
-----
