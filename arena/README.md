@@ -1,5 +1,5 @@
 
-# knowledge
+# knowledge [todo]
 ## kubeflow
 ## arena
 
@@ -7,7 +7,7 @@
 # demo purpose:
 using arena to create a jupyter notebook and then run tensorflow code over gpu
 
-# step
+# steps
 
 ```bash
 
@@ -63,7 +63,7 @@ $ curl -s https://raw.githubusercontent.com/AliyunContainerService/ai-starter/ma
 # 1. config ingress
 # 2. config service
 
-## finally, house keeping to remove all resource
+## steps 100: (optional) house keeping to remove all resource
 $ kubectl delete statefulsets arena-nb-demo-notebook -n arena-nb-ns
 $ kubectl delete pods arena-nb-demo-notebook-0 -n arena-nb-ns
 $ kubectl delete secret arena-nb-secret -n arena-nb-ns
