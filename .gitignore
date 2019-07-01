@@ -1,1 +1,4 @@
 .DS_Store
+
+arena/secret/*
+arena/code_backup/*
