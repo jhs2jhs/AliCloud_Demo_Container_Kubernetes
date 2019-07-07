@@ -2,3 +2,5 @@
 
 arena/secret/*
 arena/code_backup/*
+
+flink/src/*
