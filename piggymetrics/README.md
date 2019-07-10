@@ -1,6 +1,6 @@
 # Intro
 
-[PiggyMetrics}(https://github.com/sqshq/piggymetrics) is great to demonstrate Microservice Architecture with Spring Boot, Spring Cloud and Docker.
+[PiggyMetrics](https://github.com/sqshq/piggymetrics) is great to demonstrate Microservice Architecture with Spring Boot, Spring Cloud and Docker.
 
 # Demo
 
