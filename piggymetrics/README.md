@@ -89,24 +89,33 @@ kompose convert -f docker-compose.yml -f docker-compose.dev.yml -o piggymetrics 
 
 ## Step 3: install with HELM
 
-The following will install the application to namespace `pm`.
+The following will install the application to namespace `pm`, and name the deployment `piggy`.
 
 ```
-helm install --namespace pm piggymetrics/
+helm install --namespace pm --name piggy piggymetrics/
 ```
 
 > Note: fix HELM version mismatch
 
-You may encounter the following error, this is due to client and server mismatch
+You may encounter the following error, this is due to client and server version mismatch.
 
 ```
-helm install --namespace pm piggymetrics/
 Error: incompatible versions client[v2.14.1] server[v2.11.0]
 ```
 
-If you are using macOS, please try the following to get HELM v2.11.0
+If you are using macOS, please try the following to get HELM v2.11.0.
 
 ```
 brew unlink kubernetes-helm
 brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/ee94af74778e48ae103a9fb080e26a6a2f62d32c/Formula/kubernetes-helm.rb
+```
+
+## Step 4: view and clean up
+
+You can now access app via the `gateway` service address.
+
+Use the following to remove PiggyMetrics:
+
+```
+helm delete --purge piggy
 ```
