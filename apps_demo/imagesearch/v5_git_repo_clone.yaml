@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-notebook
+  labels:
+    app: jupyter-notebook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-notebook
+  template:
+    metadata:
+      labels:
+        app: jupyter-notebook
+    spec:
+      volumes:
+        - name: git-repo
+          emptyDir: {}
+      initContainers:
+        # This container clones the desired git repo to the EmptyDir volume.
+        - name: git-clone
+          image: alpine/git # Any image with git will do
+          args:
+            - clone
+            - --single-branch
+            - --
+            - https://code.aliyun.com/shuwei.yin/cicd-java-demo.git
+            - /home/jovyan/demo # Put it in the volume
+          volumeMounts:
+            - name: git-repo
+              mountPath: /home/jovyan/demo      
+      containers:
+      - name: minimal-notebook
+        image: jupyter/minimal-notebook:latest
+        ports:
+        - containerPort: 8888
+        command: ["start-notebook.sh"]
+        args: ["--NotebookApp.token=''"]
+        volumeMounts:
+          - name: git-repo
+            mountPath: /home/jovyan/demo
+        env:
+        - name: accessKeyId
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: accessKeyId
+        - name: accessKeySecret
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: accessKeySecret
+        - name: instanceName_General
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: instanceName_General
+        - name: instanceName_Product
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: instanceName_Product
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyter-notebook
+spec:
+  type: NodePort
+  selector:
+    app: jupyter-notebook
+  ports:
+  - protocol: TCP
+    nodePort: 30040
+    port: 8888
+    targetPort: 8888
