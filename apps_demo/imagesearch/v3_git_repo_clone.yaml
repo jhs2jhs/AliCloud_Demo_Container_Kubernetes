@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-repo-demo
+  labels:
+    app: git-repo-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: git-repo-demo
+  template:
+    metadata:
+      labels:
+        app: git-repo-demo
+    spec:
+      initContainers:
+        # This container clones the desired git repo to the EmptyDir volume.
+        - name: git-clone
+          image: alpine/git # Any image with git will do
+          args:
+            - clone
+            - --single-branch
+            - --
+            - https://code.aliyun.com/shuwei.yin/cicd-java-demo.git
+            - /repo # Put it in the volume
+          volumeMounts:
+            - name: git-repo
+              mountPath: /repo
+      containers:
+        # Replace with your actual workload.
+        - name:  busybox
+          image: busybox
+          args: ['sleep', '100000'] # Do nothing
+          volumeMounts:
+            - name: git-repo
+              mountPath: /repo
+      volumes:
+        - name: git-repo
+          emptyDir: {}

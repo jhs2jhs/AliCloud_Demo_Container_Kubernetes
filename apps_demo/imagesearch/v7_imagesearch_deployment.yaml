@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-notebook-imagesearch-ack
+  labels:
+    app: jupyter-notebook-imagesearch-ack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-notebook-imagesearch-ack
+  template:
+    metadata:
+      labels:
+        app: jupyter-notebook-imagesearch-ack
+    spec:
+      containers:
+      - name: minimal-notebook
+        image: jianhuashao/ack_demo_imagesearch:latest
+        ports:
+        - containerPort: 8888
+        command: ["start-notebook.sh"]
+        args: ["--NotebookApp.token=''"]
+        env:
+        - name: accessKeyId
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: accessKeyId
+        - name: accessKeySecret
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: accessKeySecret
+        - name: instanceName_General
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: instanceName_General
+        - name: instanceName_Product
+          valueFrom:
+            secretKeyRef:
+              name: ak
+              key: instanceName_Product
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyter-notebook-imagesearch-ack
+spec:
+  type: NodePort
+  selector:
+    app: jupyter-notebook-imagesearch-ack
+  ports:
+  - protocol: TCP
+    nodePort: 30041
+    port: 8888
+    targetPort: 8888
