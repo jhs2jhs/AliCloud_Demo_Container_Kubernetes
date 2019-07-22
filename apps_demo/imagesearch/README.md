@@ -1,4 +1,52 @@
 
+# workflow
+
+## create a customied images
+```bash
+docker build -t ack_demo_imagesearch:latest .
+# remove built images
+docker rmi -f ack_demo_imagesearch
+```
+
+## upload a customied images into dockerhub
+```bash
+docker login docker.io
+docker push jianhuashao/ack_demo_imagesearch:latest
+```
+
+## upload a customied images into alibaba
+```bash
+docker login enterprise-registry-registry.cn-shanghai.cr.aliyuncs.com
+docker tag ack_demo_imagesearch:latest enterprise-registry-registry.cn-shanghai.cr.aliyuncs.com/jhspublic/imagesearch:latest
+docker push enterprise-registry-registry.cn-shanghai.cr.aliyuncs.com/jhspublic/imagesearch:latest
+```
+
+## create namespace
+```bash
+kubectl create namespace imagesearch
+```
+
+## deployment
+```bash
+kubectl apply -f v8_imagesearch_deployment.ymal --namespace imagesearch
+```
+
+## access via browser
+```bash
+kubectl port-forward deployment/jupyter-notebook-imagesearch-ack 8888:8888 --namespace imagesearch
+# open browser: http://localhost:8888
+```
+
+
+
+
+
+
+
+
+----
+
+# yaml versions
 
 
 ## v1: build jupyter notebook and then create imagesearch services
@@ -35,6 +83,9 @@ docker push jianhuashao/ack_demo_imagesearch:latest
 
 kubectl port-forward deployment/jupyter-notebook-imagesearch-ack 8888:8888 --namespace imagesearch
 ```
+
+----
+# reference
 
 ## jupyter notebook
 https://cwienczek.com/2018/05/jupyter-on-kubernetes-the-easy-way/
