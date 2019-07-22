@@ -14,7 +14,7 @@ docker login docker.io
 docker push jianhuashao/ack_demo_imagesearch:latest
 ```
 
-## upload a customied images into alibaba
+## upload a customied images into alibaba container registory
 ```bash
 docker login enterprise-registry-registry.cn-shanghai.cr.aliyuncs.com
 docker tag ack_demo_imagesearch:latest enterprise-registry-registry.cn-shanghai.cr.aliyuncs.com/jhspublic/imagesearch:latest
@@ -46,7 +46,7 @@ kubectl port-forward deployment/jupyter-notebook-imagesearch-ack 8888:8888 --nam
 
 ----
 
-# yaml versions
+# yaml versions for reference
 
 
 ## v1: build jupyter notebook and then create imagesearch services
@@ -83,6 +83,8 @@ docker push jianhuashao/ack_demo_imagesearch:latest
 
 kubectl port-forward deployment/jupyter-notebook-imagesearch-ack 8888:8888 --namespace imagesearch
 ```
+
+## v8: upload images into alibaba container registory services
 
 ----
 # reference
