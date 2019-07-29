@@ -4,7 +4,7 @@
 
 # Demo
 
-This guide will deploy PiggyMetrics to ACK.
+This guide will deploy PiggyMetrics to a managed K8s cluster.
 
 Prerequisites:
 1. A working Kubernetes cluster
@@ -88,6 +88,25 @@ kompose convert -f docker-compose.yml -f docker-compose.dev.yml -o piggymetrics 
 ```
 
 ## Step 3: install with HELM
+
+Create a namespace called `pm` if there is none.
+
+```
+cat << EOF > namespace-pm.json
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "name": "pm",
+    "labels": {
+      "name": "piggymetrics"
+    }
+  }
+}
+EOF
+
+kubectl create -f namespace-pm.json
+```
 
 The following will install the application to namespace `pm`, and name the deployment `piggy`.
 
