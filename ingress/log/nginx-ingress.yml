@@ -1,0 +1,53 @@
+apiVersion: log.alibabacloud.com/v1alpha1
+kind: AliyunLogConfig
+metadata:
+  # your config name, must be unique in you k8s cluster
+  name: k8s-nginx-ingress
+spec:
+  # logstore name to upload log
+  logstore: nginx-ingress
+  # product code, only for k8s nginx ingress
+  productCode: k8s-nginx-ingress
+  # logtail config detail
+  logtailConfig:
+    inputType: plugin
+    # logtail config name, should be same with [metadata.name]
+    configName: k8s-nginx-ingress
+    inputDetail:
+      plugin:
+        inputs:
+        - type: service_docker_stdout
+          detail:
+            IncludeLabel:
+              io.kubernetes.container.name: nginx-ingress-controller
+            Stderr: false
+            Stdout: true
+        processors:
+        - type: processor_regex
+          detail:
+            KeepSource: false
+            Keys:
+            - client_ip
+            - x_forward_for
+            - remote_user
+            - time
+            - method
+            - url
+            - version
+            - status
+            - body_bytes_sent
+            - http_referer
+            - http_user_agent
+            - request_length
+            - request_time
+            - proxy_upstream_name
+            - upstream_addr
+            - upstream_response_length
+            - upstream_response_time
+            - upstream_status
+            - req_id
+            - host
+            NoKeyError: true
+            NoMatchError: true
+            Regex: ^(\S+)\s-\s\[([^]]+)]\s-\s(\S+)\s\[(\S+)\s\S+\s"(\w+)\s(\S+)\s([^"]+)"\s(\d+)\s(\d+)\s"([^"]*)"\s"([^"]*)"\s(\S+)\s(\S+)+\s\[([^]]*)]\s(\S+)\s(\S+)\s(\S+)\s(\S+)\s(\S+)\s*(\S*).*
+            SourceKey: content
