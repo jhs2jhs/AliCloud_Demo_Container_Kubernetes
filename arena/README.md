@@ -3,11 +3,18 @@
 ## kubeflow
 ## arena
 
+----
+# demo 2: mvp london event 2019-08-14
 
-# demo purpose:
+[K8S_Machine_Learning_DEMO.ipynb](apps_demo/arena-demo-mvp/K8S_Machine_Learning_DEMO.ipynb)
+
+
+----
+
+# demo 1: purpose:
 using arena to create a jupyter notebook and then run tensorflow code over gpu
 
-# steps
+#### steps
 
 ```bash
 
