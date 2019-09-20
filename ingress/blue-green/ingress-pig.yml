@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-piggy
+  namespace: pm
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/service-weight: 'gateway: 60, old-nginx: 40'
+spec:
+  rules:
+  - host: piggymetrics.returntrue.cc
+    http:
+      paths:
+      - backend:
+          serviceName: gateway
+          servicePort: 80
+        path: /
+      - backend:
+          serviceName: old-nginx
+          servicePort: 80
+        path: /

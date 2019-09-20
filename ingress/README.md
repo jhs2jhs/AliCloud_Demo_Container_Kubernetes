@@ -1,89 +1,57 @@
-# demo purpose:
-via LogService to detect the dashboard of ingress , kubernetes audit and so on.
+# Add a simple routing for the app
 
-# steps
+We have deployed a Spring Cloud app named [PiggyMetrics](../app/piggymetrics/). Now we add an Ingress traffic wrapper around it to have better monitoring of it.
 
+Create a `ingress-pig.yml` file with the following content, you should modify the `host` field accordingly.
 
-## step 1: Install log service when create k8s cluster
-
-![logservice_create_cluster](images/logservice_create_cluster.jpg)
-
-## step2: Check Log Controller image and version.
-
-* Find deployment: alibaba-log-controller in kube-system namespace.
-* Replace image name and version: registry-vpc.{region-id}.aliyuncs.com/log-service/alibabacloud-log-controller, region-id is which region is your cluster created. Version is 0.2.0.0-76648ee-aliyun or higher.
-
-![log_controller](images/log_controller.jpg)
-
-## step3: Deploy CRD(customer resource definition) Ingress: 
-```yaml
-apiVersion: log.alibabacloud.com/v1alpha1
-kind: AliyunLogConfig
+```yml
+apiVersion: extensions/v1beta1
+kind: Ingress
 metadata:
-  # your config name, must be unique in you k8s cluster
-  name: k8s-nginx-ingress
+  name: ingress-pig
+  namespace: pm
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  # logstore name to upload log
-  logstore: nginx-ingress
-  # product code, only for k8s nginx ingress
-  productCode: k8s-nginx-ingress
-  # logtail config detail
-  logtailConfig:
-    inputType: plugin
-    # logtail config name, should be same with [metadata.name]
-    configName: k8s-nginx-ingress
-    inputDetail:
-      plugin:
-        inputs:
-        - type: service_docker_stdout
-          detail:
-            IncludeLabel:
-              io.kubernetes.container.name: nginx-ingress-controller
-            Stderr: false
-            Stdout: true
-        processors:
-        - type: processor_regex
-          detail:
-            KeepSource: false
-            Keys:
-            - client_ip
-            - x_forward_for
-            - remote_user
-            - time
-            - method
-            - url
-            - version
-            - status
-            - body_bytes_sent
-            - http_referer
-            - http_user_agent
-            - request_length
-            - request_time
-            - proxy_upstream_name
-            - upstream_addr
-            - upstream_response_length
-            - upstream_response_time
-            - upstream_status
-            - req_id
-            - host
-            NoKeyError: true
-            NoMatchError: true
-            Regex: ^(\S+)\s-\s\[([^]]+)]\s-\s(\S+)\s\[(\S+)\s\S+\s"(\w+)\s(\S+)\s([^"]+)"\s(\d+)\s(\d+)\s"([^"]*)"\s"([^"]*)"\s(\S+)\s(\S+)+\s\[([^]]*)]\s(\S+)\s(\S+)\s(\S+)\s(\S+)\s(\S+)\s*(\S*).*
-            SourceKey: content
+  rules:
+  - host: piggymetrics.returntrue.cc
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gateway
+          servicePort: 80
 ```
 
-* refrence: https://www.alibabacloud.com/help/doc-detail/86532.htm
+Create the extension:
 
-## step4: Go to logserver console
-* logservice console(https://sls.console.aliyun.com/#/) to get all kinds of dashboard.
-* notice: the project name is ACK cluster name.
+```
+kubectl create -f ingress-pig.yml
+```
 
-![log_controller](images/logservice_project_name.jpg)
+Check the Ingress from console or:
 
-* Select "Dashboard" menu
+```
+kubectl get ingress --namespace=pm
+```
 
-![log_controller](images/dashboard.jpg)
+The results look like this:
 
-* Click one of the dashboard, below diagram is "Ingress Access Center".
+```
+NAME            HOSTS                        ADDRESS       PORTS   AGE
+ingress-piggy   piggymetrics.returntrue.cc   8.208.25.31   80      19m
+```
 
-![log_controller](images/dashboard_access.jpg)
+Next we bind the domain name to the Ingress IP address.
+
+Update the DNS or modify the `hosts` file.
+
+```
+nano /etc/hosts
+```
+
+Add the following to hosts:
+
+```
+8.208.24.241  piggymetrics.returntrue.cc
+```

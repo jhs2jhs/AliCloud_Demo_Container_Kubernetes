@@ -1,0 +1,22 @@
+{
+    "name": "k8s-uk",
+    "region_id": "eu-west-1",
+    "zoneid": "eu-west-1a",
+    "vpcid": "vpc-d7oimrcj1qrt735b99fkx",
+    "vswitchid": "vsw-d7o4865eyn5ztlzt301qq",
+    "container_cidr": "172.20.0.0/16",
+    "service_cidr": "172.21.0.0/20",
+    "cluster_type": "ManagedKubernetes",
+    "cloud_monitor_flags": true,
+    "disable_rollback": true,
+    "timeout_mins": 60,
+    "snat_entry": true,
+    "cloud_monitor_flags": false,
+    "public_slb": true,
+    "worker_instance_type": "ecs.c5.large",
+    "worker_instance_charge_type": "PostPaid",
+    "worker_system_disk_category": "cloud_efficiency",
+    "worker_system_disk_size": 120,
+    "num_of_nodes": 3,
+    "key_pair": "ecs_keys"
+}
