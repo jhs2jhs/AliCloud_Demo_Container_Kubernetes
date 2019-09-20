@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: autoscaler-metrics-demo
+  name: autoscaler-metrics-demo
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: autoscaler-metrics-demo
+  template:
+    metadata:
+      labels:
+        app: autoscaler-metrics-demo
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: app
+                operator: NotIn
+                values:
+                - autoscalerdemo
+      containers:
+      - image: nginx:1.7.9
+        name: autoscaler-metrics-demo
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: 10Gi
+            cpu: 3

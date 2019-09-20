@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: autoscaler-svc-metrics-ingress
+spec:
+  rules:
+  - host: testautoscale.cloudfoundry.top  ##替换为您集群默认的服务访问域名
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: autoscaler-metrics-service
+          servicePort: 8080

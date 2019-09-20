@@ -1,0 +1,1 @@
+This folder show you some examples yaml file of auto-scaler, you should change some configurages, such as docker image name , logservice project-name, logstore infomation in external metrics yaml file.

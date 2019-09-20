@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vk-autoscaler-svc-metrics-ingress
+spec:
+  rules:
+  - host: vkautoscale.ce4e2104fd10e4cd68ce21c40c28805e8.cn-beijing.alicontainer.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: vk-autoscaler-metrics-service
+          servicePort: 8080
